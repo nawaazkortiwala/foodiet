@@ -12,10 +12,7 @@ app.all('*', (req, __, next) => {
     console.log(req.url);
     next();
 });
-app.post('/api', (...args) => {
-    console.log('in api');
-    (0, api_1.default)(...args);
-});
+app.use('/api', api_1.default);
 app.listen(5000, () => {
     console.log('Server active: http://localhost:5000');
 });

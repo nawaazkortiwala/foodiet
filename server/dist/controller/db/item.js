@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const db_1 = require("../../db");
-const recipeRouter = (0, express_1.Router)();
-recipeRouter.get('/', (req, res) => {
-    db_1.default.query('SELECT * FROM recipe', (error, result) => {
+const itemRouter = (0, express_1.Router)();
+itemRouter.get('/', (req, res) => {
+    db_1.default.query('SELECT * FROM item', (error, result) => {
         if (error) {
             res.status(406).json({
                 error: true,
@@ -19,18 +19,18 @@ recipeRouter.get('/', (req, res) => {
         }
     });
 });
-recipeRouter.post('/', (req, res) => {
-    const { name, type, description } = req.body;
-    const query = `INSERT INTO recipe (
+itemRouter.post('/', (req, res) => {
+    const { name, type, price } = req.body;
+    const query = `INSERT INTO item (
         id,
         name,
         type,
-        description
+        price
     ) VALUES (
     ${Math.random().toString().split('.')[1].slice(0, 9)},
     '${name}',
     '${type}',
-    '${description}'
+    '${price}'
     )`;
     db_1.default.query(query, (error, result) => {
         if (error) {
@@ -47,12 +47,12 @@ recipeRouter.post('/', (req, res) => {
         }
     });
 });
-recipeRouter.put('/', (req, res) => {
-    const { id, name, type, description } = req.body;
-    const query = `UPDATE recipe SET 
+itemRouter.put('/', (req, res) => {
+    const { id, name, type, price } = req.body;
+    const query = `UPDATE item SET 
         ${name ? `name='${name}'` : ''}
         ${type ? `${name || type ? ',' : ''} type='${type}'` : ''}
-        ${description ? `${type || description ? ',' : ''} description='${description}'` : ''}
+        ${price ? `${type || price ? ',' : ''} price='${price}'` : ''}
         WHERE id=${id}
     `;
     db_1.default.query(query, (error, result) => {
@@ -70,9 +70,9 @@ recipeRouter.put('/', (req, res) => {
         }
     });
 });
-recipeRouter.delete('/', (req, res) => {
+itemRouter.delete('/', (req, res) => {
     const { id } = req.body;
-    const query = `DELETE FROM recipe WHERE id=${id}`;
+    const query = `DELETE FROM item WHERE id=${id}`;
     db_1.default.query(query, (error, result) => {
         if (error) {
             res.status(406).json({
@@ -88,5 +88,5 @@ recipeRouter.delete('/', (req, res) => {
         }
     });
 });
-exports.default = recipeRouter;
-//# sourceMappingURL=recipe.js.map
+exports.default = itemRouter;
+//# sourceMappingURL=item.js.map

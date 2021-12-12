@@ -16,10 +16,7 @@ app.all('*', (req, __, next) => {
     next()
 })
 
-app.post('/api', (...args) => {
-    console.log('in api')
-    apiRouter(...args)
-})
+app.use('/api', apiRouter)
 
 app.listen(5000, () => {
     console.log('Server active: http://localhost:5000')

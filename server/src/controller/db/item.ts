@@ -1,10 +1,10 @@
 import { Router } from 'express'
 import pool from '../../db'
 
-const recipeRouter = Router()
+const itemRouter = Router()
 
-recipeRouter.get('/', (req, res) => {
-    pool.query('SELECT * FROM recipe', (error, result) => {
+itemRouter.get('/', (req, res) => {
+    pool.query('SELECT * FROM item', (error, result) => {
         if (error) {
             res.status(406).json({
                 error: true,
@@ -19,18 +19,18 @@ recipeRouter.get('/', (req, res) => {
     })
 })
 
-recipeRouter.post('/', (req, res) => {
-    const { name, type, description } = req.body
-    const query = `INSERT INTO recipe (
+itemRouter.post('/', (req, res) => {
+    const { name, type, price } = req.body
+    const query = `INSERT INTO item (
         id,
         name,
         type,
-        description
+        price
     ) VALUES (
     ${Math.random().toString().split('.')[1].slice(0, 9)},
     '${name}',
     '${type}',
-    '${description}'
+    '${price}'
     )`
 
     pool.query(query, (error, result) => {
@@ -48,13 +48,13 @@ recipeRouter.post('/', (req, res) => {
     })
 })
 
-recipeRouter.put('/', (req, res) => {
-    const { id, name, type, description } = req.body
+itemRouter.put('/', (req, res) => {
+    const { id, name, type, price } = req.body
 
-    const query = `UPDATE recipe SET 
+    const query = `UPDATE item SET 
         ${name ? `name='${name}'` : ''}
         ${type ? `${name || type ? ',' : ''} type='${type}'` : ''}
-        ${description ? `${type || description ? ',' : ''} description='${description}'` : ''}
+        ${price ? `${type || price ? ',' : ''} price='${price}'` : ''}
         WHERE id=${id}
     `
 
@@ -73,10 +73,10 @@ recipeRouter.put('/', (req, res) => {
     })
 })
 
-recipeRouter.delete('/', (req, res) => {
+itemRouter.delete('/', (req, res) => {
     const { id } = req.body
 
-    const query = `DELETE FROM recipe WHERE id=${id}`
+    const query = `DELETE FROM item WHERE id=${id}`
 
     pool.query(query, (error, result) => {
         if (error) {
@@ -93,4 +93,4 @@ recipeRouter.delete('/', (req, res) => {
     })
 })
 
-export default recipeRouter
+export default itemRouter
